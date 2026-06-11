@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulateur d&#x27;Aménagement Intérieur Minimaliste | Votre Espace, Vos Règles</title>
+    <meta name="description" content="Visualisez l">
+    <style>
+        :root {
+            --color-primary: #8a7a6c; /* Sand beige */
+            --color-secondary: #c9c0b7; /* Lighter sand */
+            --color-accent: #a39587; /* Slightly darker sand */
+            --color-text: #3a3a3a;
+            --color-background: #f7f5f2;
+            --color-light-background: #ffffff;
+            --font-display: 'Futura Now', 'Gill Sans', 'Calibri', sans-serif;
+            --font-body: 'Inter', 'Helvetica Neue', 'Arial', sans-serif;
+            --spacing-unit: 1rem;
+        }
+
+        body {
+            font-family: var(--font-body);
+            color: var(--color-text);
+            line-height: 1.6;
+            margin: 0;
+            background-color: var(--color-background);
+            scroll-behavior: smooth;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: var(--font-display);
+            color: var(--color-primary);
+            font-weight: 600;
+            letter-spacing: -0.02em;
+        }
+
+        h1 { font-size: 2.8rem; text-align: center; margin-bottom: 2rem; }
+        h2 { font-size: 2.2rem; margin-top: 3rem; margin-bottom: 1.5rem; text-align: center;}
+        h3 { font-size: 1.8rem; margin-top: 2.5rem; margin-bottom: 1rem; }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: var(--spacing-unit) * 2;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, var(--color-secondary) 0%, var(--color-primary) 100%);
+            color: var(--color-light-background);
+            padding: var(--spacing-unit) * 4 0;
+            text-align: center;
+            border-bottom-left-radius: 20px;
+            border-bottom-right-radius: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 1rem auto 2rem;
+            font-weight: 300;
+        }
+
+        .section-panel {
+            background-color: var(--color-light-background);
+            padding: var(--spacing-unit) * 2.5;
+            margin: var(--spacing-unit) * 2 auto;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .grid-2-cols {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: var(--spacing-unit) * 2;
+        }
+        @media (min-width: 768px) {
+            .grid-2-cols {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--color-primary);
+        }
+
+        input[type="number"],
+        select,
+        textarea {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin-bottom: 1rem;
+            border: 1px solid var(--color-secondary);
+            border-radius: 5px;
+            font-family: var(--font-body);
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        input[type="number"]:focus,
+        select:focus,
+        textarea:focus {
+            border-color: var(--color-primary);
+            outline: none;
+        }
+
+        button {
+            background-color: var(--color-primary);
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            font-family: var(--font-display);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        button:hover {
+            background-color: var(--color-accent);
+        }
+
+        #tool-result {
+            margin-top: var(--spacing-unit) * 2;
+            padding: var(--spacing-unit) * 1.5;
+            background-color: var(--color-background);
+            border-radius: 8px;
+            border: 1px dashed var(--color-secondary);
+            min-height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            font-style: italic;
+            color: var(--color-primary);
+        }
+
+        .result-item {
+            padding: 10px;
+            margin-bottom: 10px;
+            background-color: #f0f0e8;
+            border-left: 4px solid var(--color-accent);
+            border-radius: 3px;
+        }
+
+        .cta-button {
+            display: block;
+            width: fit-content;
+            margin: var(--spacing-unit) * 2 auto;
+            background-color: var(--color-primary);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 1.2rem;
+            font-weight: 500;
+            transition: background-color 0.3s ease;
+        }
+
+        .cta-button:hover {
+            background-color: var(--color-accent);
+        }
+
+        .headline-variants {
+            background-color: var(--color-background);
+            padding: var(--spacing-unit) * 2.5;
+            margin: var(--spacing-unit) * 2 auto;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .headline-variants ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .headline-variants li {
+            background-color: var(--color-light-background);
+            margin-bottom: 0.8rem;
+            padding: 0.8rem 1rem;
+            border-left: 5px solid var(--color-secondary);
+            border-radius: 4px;
+            font-size: 1.05rem;
+        }
+
+        .seo-section {
+            background-color: var(--color-primary);
+            color: var(--color-light-background);
+            padding: var(--spacing-unit) * 3 0;
+            text-align: center;
+            border-top-left-radius: 20px;
+            border-top-right-radius: 20px;
+            margin-top: var(--spacing-unit) * 3;
+        }
+
+        .seo-section h3 {
+            color: var(--color-light-background);
+            margin-bottom: var(--spacing-unit);
+        }
+
+        .seo-section p {
+            max-width: 800px;
+            margin: 0.5rem auto;
+            font-size: 0.95rem;
+            line-height: 1.8;
+            opacity: 0.9;
+        }
+    </style>
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://simulateur-d-amenagement-interieur-minimaliste-1.onrender.com">
+    <meta property="og:title" content="Simulateur d&#x27;Aménagement Intérieur Minimaliste">
+    <meta property="og:description" content="Visualisez l">
+    <meta property="og:url" content="https://simulateur-d-amenagement-interieur-minimaliste-1.onrender.com">
+    <meta property="og:type" content="website">
+    <script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "Simulateur d'Aménagement Intérieur Minimaliste", "description": "Visualisez l", "url": "https://simulateur-d-amenagement-interieur-minimaliste-1.onrender.com", "applicationCategory": "UtilityApplication", "operatingSystem": "Web Browser"}</script>
+</head>
+<body data-site-slug="simulateur-d-amenagement-interieur-minimaliste-1" data-runtime-mode="palette_generator">
+
+    <div class="hero">
+        <div class="container">
+            <h1>Simulateur d'Aménagement Intérieur Minimaliste</h1>
+            <p>Visualisez l'agencement de votre espace de vie avec des meubles et objets au style minimaliste. Ajustez les dimensions, les couleurs et les matériaux pour créer votre havre de paix.</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="section-panel">
+            <h2>Votre Espace, Vos Règles</h2>
+            <p>Définissez les paramètres clés de votre pièce et laissez notre simulateur vous guider vers un design épuré, fonctionnel et harmonieux. Un intérieur scandinave, zen ou simplement minimaliste ? C'est à vous de choisir.</p>
+
+            <form id="tool-form">
+                <div class="grid-2-cols">
+                    <div>
+                        <label for="room-width">Largeur de la pièce (m)</label>
+                        <input type="number" id="room-width" value="4" min="1" step="0.1" required>
+                    </div>
+                    <div>
+                        <label for="room-length">Longueur de la pièce (m)</label>
+                        <input type="number" id="room-length" value="5" min="1" step="0.1" required>
+                    </div>
+                </div>
+
+                <label for="style-preference">Préférence de style</label>
+                <select id="style-preference">
+                    <option value="scandinave">Scandinave</option>
+                    <option value="zen">Zen</option>
+                    <option value="industriel">Industriel (minimaliste)</option>
+                    <option value="contemporain">Contemporain (minimaliste)</option>
+                    <option value="sur-mesure">Sur mesure (personnalisez)</option>
+                </select>
+
+                <label for="material-preference">Matériaux préférés</label>
+                <input type="text" id="material-preference" value="Bois clair, Lin, Béton ciré" placeholder="Ex: Bois clair, Lin, Métal">
+
+                <label for="color-palette">Palette de couleurs (mots-clés)</label>
+                <input type="text" id="color-palette" value="Blanc cassé, Gris perle, Vert sauge" placeholder="Ex: Blanc, Gris, Taupe, Bleu doux">
+
+                <label for="additional-notes">Notes additionnelles</label>
+                <textarea id="additional-notes" rows="3" placeholder="Ex: Besoin d'un coin lecture confortable, grande fenêtre au sud."></textarea>
+
+                <button type="submit" id="tool-submit">Générer l'Aménagement</button>
+            </form>
+
+            <h3 style="text-align: center; margin-top: 3rem;">Votre Aménagement Suggéré</h3>
+            <div id="tool-result">
+                <p id="result-detail">Vos suggestions d'aménagement apparaîtront ici.</p>
+            </div>
+        </div>
+
+        <div class="headline-variants section-panel">
+            <h2>Trouvez l'inspiration pour votre intérieur</h2>
+            <p>Découvrez différentes approches pour exprimer l'essence de votre espace minimaliste.</p>
+            <h3>Variantes de Titres par Style</h3>
+            <ul>
+                <li><strong>SEO :</strong> Aménagement Intérieur Minimaliste : Idées et Conseils pour un Espace Épuré</li>
+                <li><strong>Clickbait :</strong> Révélez Votre Intérieur Minimaliste Idéal en 5 Clics !</li>
+                <li><strong>Expert :</strong> Guide Pratique : Maîtriser l'Art de l'Épure dans Votre Décoration</li>
+                <li><strong>Doux :</strong> Créez Votre Cocon Minimaliste : Douceur et Sérénité au Quotidien</li>
+                <li><strong>Commercial :</strong> Design Minimaliste : Des Solutions Élégantes pour un Habitat Fonctionnel</li>
+            </ul>
+        </div>
+
+        <div class="section-panel">
+            <h2>Pourquoi Opter pour le Minimalisme ?</h2>
+            <div class="grid-2-cols">
+                <div>
+                    <h3>Clarté Mentale</h3>
+                    <p>Un espace désencombré favorise un esprit clair. Moins d'objets, c'est moins de distractions et plus de sérénité au quotidien.</p>
+                </div>
+                <div>
+                    <h3>Fonctionnalité Optimale</h3>
+                    <p>Chaque pièce a sa place et son utilité. Le design minimaliste privilégie la praticité et l'efficacité, rendant votre intérieur plus agréable à vivre.</p>
+                </div>
+                <div>
+                    <h3>Esthétique Intemporelle</h3>
+                    <p>Les lignes épurées, les matériaux nobles et les couleurs neutres créent une ambiance calme et élégante qui traverse les modes.</p>
+                </div>
+                <div>
+                    <h3>Durabilité & Valeur</h3>
+                    <p>En choisissant moins d'objets, on privilégie souvent la qualité. Investir dans des pièces durables, c'est une démarche écologique et économique sur le long terme.</p>
+                </div>
+            </div>
+            <a href="#" class="cta-button" data-affiliate-slot="inspiration-button">Découvrir plus d'idées</a>
+        </div>
+    </div>
+
+    <div class="seo-section">
+        <div class="container">
+            <h3>Optimisez Votre Recherche d'Aménagement Intérieur Minimaliste</h3>
+            <p>Vous cherchez à transformer votre salon en un espace <a href="/amenagement-salon-minimaliste">salon minimaliste</a> ou à repenser votre <a href="/design-interieur-epure">design intérieur épuré</a> ? Notre simulateur vous aide à visualiser votre <a href="/decoration-scandinave-chambre">décoration scandinave pour chambre</a> ou un <a href="/style-zen-maison">style zen pour la maison</a>. Trouvez l'inspiration pour un <a href="/interieur-fonctionnel">intérieur fonctionnel</a>, explorez des <a href="/idees-design-simple">idées de design simple</a> et découvrez comment créer un <a href="/havre-de-paix-chez-soi">havre de paix chez soi</a>. Que vous soyez intéressé par les <a href="/meubles-minimalistes-modernes">meubles minimalistes modernes</a>, les <a href="/palettes-couleurs-neutres">palettes de couleurs neutres</a>, ou les <a href="/materiaux-naturels-deco">matériaux naturels en décoration</a>, notre outil est là pour vous guider. Simplifiez votre vie avec un <a href="/mode-de-vie-minimaliste">mode de vie minimaliste</a> et un <a href="/conseils-agencement-petit-espace">agencement optimal pour petits espaces</a>.</p>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('tool-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const roomWidth = parseFloat(document.getElementById('room-width').value);
+            const roomLength = parseFloat(document.getElementById('room-length').value);
+            const stylePreference = document.getElementById('style-preference').value;
+            const materialPreference = document.getElementById('material-preference').value;
+            const colorPalette = document.getElementById('color-palette').value;
+            const additionalNotes = document.getElementById('additional-notes').value;
+
+            const roomArea = roomWidth * roomLength;
+            const suggestions = [];
+
+            suggestions.push(`<strong>Superficie de la pièce :</strong> ${roomArea.toFixed(2)} m²`);
+
+            let baseFurniture = [];
+            let colorAdvice = [];
+            let materialAdvice = [];
+
+            if (stylePreference === 'scandinave') {
+                baseFurniture = [
+                    'Un canapé en tissu clair (lin ou coton)',
+                    'Une table basse en bois clair aux lignes épurées',
+                    'Des étagères murales discrètes',
+                    'Une lampe sur pied avec un abat-jour simple',
+                    'Un tapis en laine ou jute aux motifs géométriques discrets'
+                ];
+                colorAdvice = ['Murs : Blanc, Gris clair, Beige doux', 'Accents : Bleu pastel, Vert mint, Rose poudré'];
+                materialAdvice = ['Bois clair (bouleau, chêne), Laine, Coton, Céramique, Métal noir mat'];
+            } else if (stylePreference === 'zen') {
+                baseFurniture = [
+                    'Un futon ou canapé bas en lin',
+                    'Une table basse minimaliste en bois sombre ou verre',
+                    'Un banc en bois comme support',
+                    'Des coussins de sol',
+                    'Plantes vertes (bonsaï, fougère)'
+                ];
+                colorAdvice = ['Murs : Blanc cassé, Beige sable, Gris galet', 'Accents : Vert olive, Brun terre, Indigo'];
+                materialAdvice = ['Bambou, Rotin, Lin, Coton, Pierre, Céramique, Bois foncé'];
+            } else if (stylePreference === 'industriel') {
+                baseFurniture = [
+                    'Un canapé en cuir vieilli ou tissu foncé',
+                    'Une table basse en métal et bois brut',
+                    'Des étagères en métal et bois',
+                    'Suspension en métal ou ampoules à filament apparent',
+                    'Un grand tapis à motifs géométriques sombres'
+                ];
+                colorAdvice = ['Murs : Gris anthracite, Blanc industriel, Brique apparente', 'Accents : Noir, Métal rouillé, Cuir'];
+                materialAdvice = ['Métal (acier, fer), Bois brut (manguier, pin), Cuir, Béton ciré, Brique'];
+            } else if (stylePreference === 'contemporain') {
+                baseFurniture = [
+                    'Un canapé modulaire aux lignes strictes',
+                    'Une table basse design en verre, métal ou marbre',
+                    'Une console épurée',
+                    'Luminaires intégrés ou spots',
+                    'Œuvre d\'art abstraite unique'
+                ];
+                colorAdvice = ['Murs : Blanc pur, Gris chaud, Taupe', 'Accents : Noir, Or brossé, Couleurs primaires (par petites touches)'];
+                materialAdvice = ['Verre, Métal chromé ou laqué, Marbre, Corian, Bois laqué'];
+            } else if (stylePreference === 'sur-mesure') {
+                baseFurniture = [
+                    'Considérez la taille de votre pièce pour les meubles clés (canapé, table)',
+                    'Optez pour des rangements intégrés ou modulables',
+                    'Pensez à des meubles multi-fonctionnels'
+                ];
+                colorAdvice = ['Considérez les couleurs claires pour agrandir, les couleurs sombres pour un effet cocooning.', 'Utilisez 2-3 couleurs principales et une couleur d\'accent.'];
+                materialAdvice = ['Mélangez 2-3 textures différentes pour créer de l\'intérêt sans surcharger.'];
+            }
+
+            suggestions.push(`<h3>Suggestions de Mobilier pour un style ${stylePreference} :</h3><ul>${baseFurniture.map(item => `<li>${item}</li>`).join('')}</ul>`);
+            suggestions.push(`<h3>Palette de Couleurs :</h3><ul>${colorAdvice.map(item => `<li>${item}</li>`).join('')}<li><em>Vos préférences : ${colorPalette || 'Non spécifié'}</em></li></ul>`);
+            suggestions.push(`<h3>Matériaux Recommandés :</h3><ul>${materialAdvice.map(item => `<li>${item}</li>`).join('')}<li><em>Vos préférences : ${materialPreference || 'Non spécifié'}</em></li></ul>`);
+
+            if (roomArea < 15) {
+                suggestions.push('<p><strong>Conseil pour petits espaces :</strong> Privilégiez les meubles multifonctionnels et la verticalité. Des miroirs peuvent agrandir visuellement la pièce.</p>');
+            } else if (roomArea > 30) {
+                suggestions.push('<p><strong>Conseil pour grands espaces :</strong> Créez des zones distinctes (lecture, détente) avec des tapis ou des paravents légers pour ne pas perdre la sensation de confort.</p>');
+            }
+
+            if (additionalNotes) {
+                suggestions.push(`<p><strong>Notes additionnelles prises en compte :</strong> ${additionalNotes}</p>`);
+            }
+
+            suggestions.push('<p>N\'oubliez pas l\'éclairage, il est essentiel pour créer l\'ambiance souhaitée. Privilégiez des sources de lumière indirecte.</p>');
+
+            document.getElementById('tool-result').innerHTML = suggestions.map(s => `<div class="result-item">${s}</div>`).join('');
+        });
+    </script>
+<div id="qa-smoke-result" hidden></div>
+<script id="farmbuilder-affiliate-helper">
+(function () {
+  window.__UTILITY_AFFILIATE_MAP = window.__UTILITY_AFFILIATE_MAP || {};
+  document.addEventListener("click", function (event) {
+    const target = event.target.closest("[data-affiliate-slot]");
+    if (!target) return;
+    const slot = target.getAttribute("data-affiliate-slot");
+    const href = window.__UTILITY_AFFILIATE_MAP[slot];
+    if (!href) return;
+    if (target.tagName && target.tagName.toLowerCase() === "a") {
+      target.setAttribute("href", href);
+      target.removeAttribute("rel");
+      return;
+    }
+    event.preventDefault();
+    window.open(href, "_blank");
+  }, true);
+})();
+</script>
+<script id="farmbuilder-functional-qa">
+(function () {
+  function marker() {
+    let node = document.getElementById("qa-smoke-result");
+    if (node) return node;
+    node = document.createElement("div");
+    node.id = "qa-smoke-result";
+    node.hidden = true;
+    document.body.appendChild(node);
+    return node;
+  }
+
+  let qaFinished = false;
+  let qaWatchdog = null;
+
+  function normalize(text) {
+    return String(text || "").replace(/\s+/g, " ").trim();
+  }
+
+  function findForm() {
+    return document.getElementById("tool-form") || document.querySelector("form");
+  }
+
+  function findResult() {
+    return (
+      document.getElementById("tool-result") ||
+      document.querySelector("[data-result]") ||
+      document.querySelector(".tool-result, .result-card, .result, .results, .output, .preview, .diagnostic, .analysis")
+    );
+  }
+
+  function primaryAction(form) {
+    if (!form) return null;
+    return (
+      document.getElementById("tool-submit") ||
+      form.querySelector("#tool-submit") ||
+      form.querySelector("[data-primary-action]") ||
+      form.querySelector("button[type=submit]") ||
+      form.querySelector("button") ||
+      form.querySelector("input[type=submit]")
+    );
+  }
+
+  function resultSignature(node) {
+    if (!node) return "";
+    const text = normalize(node.textContent);
+    const html = normalize(node.innerHTML).slice(0, 600);
+    return `${text}||${html}`;
+  }
+
+  function resultHeadline(node) {
+    if (!node) return "";
+    const heading = node.querySelector("h1, h2, h3, strong, b");
+    return normalize(heading ? heading.textContent : "");
+  }
+
+  function sampleText(field) {
+    const key = `${field.id || ""} ${field.name || ""} ${field.placeholder || ""}`.toLowerCase();
+    if (/email/.test(key)) return "bonjour@example.com";
+    if (/url|site|website|lien/.test(key)) return "https://example.com/offre-solaire";
+    if (/phone|tel|mobile/.test(key)) return "0612345678";
+    if (/ville|city|localisation|location|region|departement|postal/.test(key)) return "Paris";
+    if (/orientation/.test(key)) return "sud";
+    if (/keyword|theme|topic|sujet|subject/.test(key)) return "energie solaire domestique";
+    if (/titre|title/.test(key)) return "Simulateur solaire maison";
+    if (/nom|name|project/.test(key)) return "Projet Horizon";
+    if (/description|notes|content|message/.test(key)) return "Maison individuelle exposee sud avec toiture exploitable.";
+    return field.placeholder || "France";
+  }
+
+  function sampleNumber(field) {
+    const key = `${field.id || ""} ${field.name || ""}`.toLowerCase();
+    if (/inclinaison|angle|slope/.test(key)) return "30";
+    if (/surface|size|m2|sqm/.test(key)) return "28";
+    if (/annee|year/.test(key)) return "2024";
+    if (/prix|price|budget|cost|amount|montant/.test(key)) return "12000";
+    const min = Number(field.min || "");
+    const max = Number(field.max || "");
+    if (Number.isFinite(min) && Number.isFinite(max) && max >= min) {
+      return String(Math.min(max, Math.max(min, min + Math.round((max - min) * 0.35))));
+    }
+    if (Number.isFinite(min)) return String(Math.max(min, 12));
+    if (Number.isFinite(max)) return String(Math.min(max, 12));
+    return field.value || "12";
+  }
+
+  function applySample(field) {
+    const tag = (field.tagName || "").toLowerCase();
+    const type = (field.type || "").toLowerCase();
+    if (field.disabled) return;
+    if (type === "hidden" || type === "submit" || type === "button" || type === "reset" || type === "image" || type === "file") {
+      return;
+    }
+    const currentValue = normalize(field.value);
+    if (tag === "select") {
+      if (currentValue) return;
+      const option = Array.from(field.options || []).find((item) => item.value && !item.disabled) || field.options[0];
+      if (option) field.value = option.value;
+      return;
+    }
+    if (type === "checkbox") {
+      if (field.checked) return;
+      field.checked = true;
+      return;
+    }
+    if (type === "radio") {
+      if (field.checked) return;
+      field.checked = true;
+      return;
+    }
+    if (type === "date") {
+      if (currentValue) return;
+      field.value = "2026-03-01";
+      return;
+    }
+    if (type === "email") {
+      if (currentValue) return;
+      field.value = "bonjour@example.com";
+      return;
+    }
+    if (type === "url") {
+      if (currentValue) return;
+      field.value = "https://example.com/offre-solaire";
+      return;
+    }
+    if (type === "tel") {
+      if (currentValue) return;
+      field.value = "0612345678";
+      return;
+    }
+    if (type === "color") {
+      if (currentValue) return;
+      field.value = "#2f855a";
+      return;
+    }
+    if (type === "number" || type === "range") {
+      if (currentValue) return;
+      field.value = sampleNumber(field);
+      return;
+    }
+    if (currentValue) return;
+    field.value = sampleText(field);
+  }
+
+  function stamp(status, detail, headline, primary) {
+    if (qaFinished) return;
+    qaFinished = true;
+    if (qaWatchdog) {
+      window.clearTimeout(qaWatchdog);
+      qaWatchdog = null;
+    }
+    const node = marker();
+    node.dataset.status = status;
+    node.dataset.mode = "native-form";
+    node.dataset.detail = detail || "";
+    node.dataset.headline = headline || "";
+    node.dataset.primary = primary || "";
+    node.dataset.viewport = window.innerWidth <= 640 ? "mobile" : "desktop";
+    window.setTimeout(function () {
+      try {
+        window.stop();
+      } catch (_error) {}
+    }, 0);
+  }
+
+  function installModalGuards() {
+    const noop = function () {};
+    const approve = function () { return true; };
+    const empty = function () { return ""; };
+    try { window.alert = noop; } catch (_error) {}
+    try { window.confirm = approve; } catch (_error) {}
+    try { window.prompt = empty; } catch (_error) {}
+  }
+
+  function triggerAction(form, action) {
+    try {
+      if (typeof form.requestSubmit === "function") {
+        form.requestSubmit(action || undefined);
+        return;
+      }
+    } catch (_error) {}
+    if (action && typeof action.click === "function") {
+      action.click();
+      return;
+    }
+    form.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }));
+  }
+
+  function inspectResult(before, attemptsLeft) {
+    const result = findResult();
+    if (!result) {
+      stamp("fail", "La zone de resultat est introuvable.", "");
+      return;
+    }
+    const after = resultSignature(result);
+    const text = normalize(result.textContent);
+    if (after && after !== before && text.length >= 24) {
+      const primary = result.querySelector("a[href], button[data-href], [data-primary-url]") || document.querySelector("#tool-result a[href]");
+      stamp("pass", "Le formulaire natif a mis a jour la zone de resultat.", resultHeadline(result), primary ? (primary.getAttribute("href") || primary.getAttribute("data-primary-url") || "") : "");
+      return;
+    }
+    if (attemptsLeft > 0) {
+      window.setTimeout(function () {
+        inspectResult(before, attemptsLeft - 1);
+      }, 250);
+      return;
+    }
+    stamp("fail", "La zone de resultat n'a pas renvoye de contenu exploitable.", resultHeadline(result));
+  }
+
+  function runSmoke() {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("__qa") !== "functional") return;
+    qaWatchdog = window.setTimeout(function () {
+      stamp("fail", "QA smoke timed out before the page reported a usable result.", "");
+    }, 7000);
+    const form = findForm();
+    if (!form) {
+      stamp("fail", "Le formulaire principal est introuvable.", "");
+      return;
+    }
+    const result = findResult();
+    const before = resultSignature(result);
+    installModalGuards();
+    try {
+      form.querySelectorAll("input, select, textarea").forEach(applySample);
+    } catch (error) {
+      stamp("fail", error && error.message ? `QA smoke sample failed: ${error.message}` : "QA smoke sample failed before submit.", "");
+      return;
+    }
+    const action = primaryAction(form);
+    try {
+      triggerAction(form, action);
+    } catch (error) {
+      stamp("fail", error && error.message ? `QA smoke submit failed: ${error.message}` : "QA smoke submit failed.", "");
+      return;
+    }
+    inspectResult(before, 10);
+  }
+
+  window.addEventListener("error", function (event) {
+    const message = event && event.message ? event.message : "JavaScript runtime error during QA smoke.";
+    stamp("fail", `QA smoke JS error: ${message}`, "");
+  }, { once: true });
+
+  window.addEventListener("unhandledrejection", function (event) {
+    const reason = event && event.reason;
+    const detail = typeof reason === "string"
+      ? reason
+      : reason && reason.message
+        ? reason.message
+        : "Unhandled promise rejection during QA smoke.";
+    stamp("fail", `QA smoke rejection: ${detail}`, "");
+  }, { once: true });
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", function () {
+      window.setTimeout(runSmoke, 60);
+    }, { once: true });
+  } else {
+    window.setTimeout(runSmoke, 60);
+  }
+})();
+</script>
+</body>
+</html>
